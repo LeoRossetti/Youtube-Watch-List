@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=320, initial-scale=1.0">
+    <title>YouTube Watch List</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            width: 320px;
+            padding: 18px 14px 14px 14px;
+            background: #181818;
+            color: #fff;
+            border-radius: 18px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+        }
+        h2 {
+            font-size: 20px;
+            margin-bottom: 16px;
+            letter-spacing: 1px;
+            font-weight: 600;
+            color: #ff4c4c;
+            text-shadow: 0 2px 8px #0002;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 16px 0;
+        }
+        li {
+            background: #232323;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            padding: 12px 14px;
+            box-shadow: 0 2px 8px #0003;
+            transition: background 0.2s, transform 0.2s;
+            display: flex;
+            align-items: center;
+        }
+        li:hover {
+            background: #292929;
+            transform: translateY(-2px) scale(1.02);
+        }
+        a {
+            color: #ff4c4c;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 15px;
+            flex: 1;
+            transition: color 0.2s;
+        }
+        a:hover {
+            color: #fff;
+            text-decoration: underline;
+        }
+        .timestamp {
+            background: #ff4c4c;
+            color: #fff;
+            border-radius: 8px;
+            padding: 2px 8px;
+            font-size: 13px;
+            margin-left: 10px;
+            font-weight: 600;
+            box-shadow: 0 1px 4px #0002;
+        }
+        #clear-list {
+            width: 100%;
+            background: linear-gradient(90deg, #ff4c4c 60%, #ff7b7b 100%);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 0;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 2px 8px #0002;
+            transition: background 0.2s, transform 0.2s;
+        }
+        #clear-list:hover {
+            background: linear-gradient(90deg, #ff7b7b 60%, #ff4c4c 100%);
+            transform: scale(1.03);
+        }
+        ::selection {
+            background: #ff4c4c44;
+        }
+        .remove-btn {
+            background: none;
+            border: none;
+            color: #ff4c4c;
+            font-size: 18px;
+            margin-left: 10px;
+            cursor: pointer;
+            border-radius: 50%;
+            transition: background 0.2s;
+            padding: 2px 6px;
+        }
+        .remove-btn:hover {
+            background: #ff4c4c22;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <h2>Watch List</h2>
+    <ul id="watch-list"></ul>
+    <button id="clear-list">Clear Watch List</button>
+    <script src="popup.js"></script>
+</body>
+</html>
