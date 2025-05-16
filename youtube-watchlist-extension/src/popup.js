@@ -1,3 +1,5 @@
+// Handles displaying and managing the watch list in the popup
+
 document.addEventListener('DOMContentLoaded', () => {
     const list = document.getElementById('watch-list');
     const clearBtn = document.getElementById('clear-list');
@@ -17,7 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 <span class="timestamp">${formatTime(video.timestamp)}</span>
                 <button class="remove-btn" title="Remove">&#10005;</button>
             `;
-            // Remove button logic
             li.querySelector('.remove-btn').onclick = () => {
                 chrome.storage.local.get(['watchList'], (result) => {
                     const updatedList = (result.watchList || []).filter((v, i) => i !== idx);
@@ -44,5 +45,3 @@ function formatTime(seconds) {
     const sec = seconds % 60;
     return `${min}:${sec.toString().padStart(2, '0')}`;
 }
-
-// CSS for .remove-btn should be placed inside a <style> tag in popup.html, not in this JS file.

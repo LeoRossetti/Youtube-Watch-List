@@ -1,7 +1,21 @@
-function addSaveButton() {
-    if (document.getElementById('yt-watchlist-save-btn')) return;
+// Injects the "Save to Watch List" button on YouTube video pages and handles SPA navigation
 
-    // Create button
+let lastVideoId = null;
+let debounceTimeout = null;
+let observer = null;
+
+// Extracts the video ID from the current URL
+function getVideoIdFromUrl() {
+    try {
+        const url = new URL(window.location.href);
+        return url.searchParams.get('v');
+    } catch {
+        return null;
+    }
+}
+
+// Creates the styled Save button
+function createSaveButton() {
     const button = document.createElement('button');
     button.id = 'yt-watchlist-save-btn';
     button.title = 'Save to Watch List';
@@ -11,23 +25,25 @@ function addSaveButton() {
         </svg>
         <span style="vertical-align:middle;font-size:15px;">Save</span>
     `;
-    button.style.display = 'flex';
-    button.style.alignItems = 'center';
-    button.style.gap = '4px';
-    button.style.background = '#b22222'; // darker red
-    button.style.color = '#fff';
-    button.style.border = 'none';
-    button.style.borderRadius = '20px';
-    button.style.padding = '6px 14px';
-    button.style.fontWeight = '600';
-    button.style.fontSize = '15px';
-    button.style.cursor = 'pointer';
-    button.style.marginLeft = '8px';
-    button.style.boxShadow = '0 2px 8px #0002';
-    button.style.transition = 'background 0.2s, transform 0.2s';
+    Object.assign(button.style, {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '4px',
+        background: '#b22222',
+        color: '#fff',
+        border: 'none',
+        borderRadius: '20px',
+        padding: '6px 14px',
+        fontWeight: '600',
+        fontSize: '15px',
+        cursor: 'pointer',
+        marginLeft: '8px',
+        boxShadow: '0 2px 8px #0002',
+        transition: 'background 0.2s, transform 0.2s'
+    });
 
     button.onmouseover = () => {
-        button.style.background = '#d32f2f'; // slightly lighter dark red for hover
+        button.style.background = '#d32f2f';
         button.style.transform = 'scale(1.04)';
     };
     button.onmouseout = () => {
@@ -64,14 +80,55 @@ function addSaveButton() {
         });
     };
 
-    // Placement: next to Like/Dislike/Share buttons
-    const buttonsContainer = document.querySelector('#top-level-buttons-computed') || document.querySelector('#top-level-buttons');
-    if (buttonsContainer) {
-        buttonsContainer.appendChild(button);
+    return button;
+}
+
+// Adds the Save button if on a new video and the container exists
+function addSaveButtonIfNeeded() {
+    const videoId = getVideoIdFromUrl();
+    if (!videoId || videoId === lastVideoId) return;
+    lastVideoId = videoId;
+
+    // Remove existing button to prevent duplicates
+    const oldBtn = document.getElementById('yt-watchlist-save-btn');
+    if (oldBtn) oldBtn.remove();
+
+    // Wait for the buttons container to exist
+    function tryInsert() {
+        const buttonsContainer = document.querySelector('#top-level-buttons-computed') || document.querySelector('#top-level-buttons');
+        if (buttonsContainer) {
+            const button = createSaveButton();
+            buttonsContainer.appendChild(button);
+        } else {
+            setTimeout(tryInsert, 300);
+        }
+    }
+    tryInsert();
+}
+
+// Observes for DOM changes and SPA navigation
+function observeAndAddButton() {
+    if (observer) observer.disconnect();
+
+    observer = new MutationObserver(() => {
+        clearTimeout(debounceTimeout);
+        debounceTimeout = setTimeout(addSaveButtonIfNeeded, 300);
+    });
+
+    const target = document.querySelector('ytd-watch-flexy');
+    if (target) {
+        observer.observe(target, { childList: true, subtree: true });
+        addSaveButtonIfNeeded();
     } else {
-        document.body.appendChild(button);
+        setTimeout(observeAndAddButton, 1000);
     }
 }
 
-// Run when the page loads or changes
-setTimeout(addSaveButton, 2000);
+// Listen for YouTube SPA navigation events
+window.addEventListener('yt-navigate-finish', () => {
+    lastVideoId = null;
+    observeAndAddButton();
+});
+
+// Initial run
+observeAndAddButton();
