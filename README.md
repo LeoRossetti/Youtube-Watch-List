@@ -9,7 +9,7 @@ This is a Google Chrome extension I made for saving youtube videos to watch late
 OBS: This might be a temporary tutorial because I'm working on putting this extension in the Chrome Store.
 
 1. Go to one of the following links:         
-        If you use Brave: brave://extensions/          
+        If you use Brave: brave://extensions/ 
         If you use Chrome: chrome://extensions/
 
 2. Select the "Developer Mode" option on the top.

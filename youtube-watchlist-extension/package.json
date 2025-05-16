@@ -1,13 +1,14 @@
 {
   "name": "youtube-watchlist-extension",
   "version": "1.0.0",
-  "description": "A Chrome extension to save YouTube videos with timestamps for later viewing.",
+  "description": "A Chrome/Brave extension to save YouTube videos with timestamps for later viewing.",
   "main": "src/background.js",
   "scripts": {
     "build": "echo 'Build script not defined'",
     "test": "echo 'Test script not defined'"
   },
   "keywords": [
+    "brave",
     "chrome",
     "extension",
     "youtube",
